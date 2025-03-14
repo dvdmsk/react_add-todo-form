@@ -8,7 +8,9 @@ import { ToDo, ToDoList, User } from './utils/types';
 
 function getToDos(todos: ToDoList[], users: User[]): ToDo[] {
   const newTodo: ToDo[] = todos.map(todo => {
-    const user: User | undefined = users.find(u => u.id === todo.userId);
+    const user: User | undefined = users.find(
+      userItem => userItem.id === todo.userId,
+    );
 
     if (user) {
       return {
@@ -51,18 +53,13 @@ export const App = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (title && userSelect) {
-      const foundedUser: User | undefined = getUserByID(
-        userSelect,
-        usersFromServer,
-      );
-
       setTodos(prev => [
         ...prev,
         {
           id: getIdTodo(prev),
           title: title,
           completed: false,
-          user: foundedUser,
+          user: getUserByID(userSelect, usersFromServer),
         },
       ]);
       setIsValid(() => ({ title: true, user: true }));
