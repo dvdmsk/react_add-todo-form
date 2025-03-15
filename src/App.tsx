@@ -52,7 +52,7 @@ export const App = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (title && userSelect) {
+    if (title.trim() && userSelect) {
       setTodos(prev => [
         ...prev,
         {
@@ -69,7 +69,10 @@ export const App = () => {
       return;
     }
 
-    setIsValid(() => ({ title: Boolean(title), user: Boolean(userSelect) }));
+    setIsValid(() => ({
+      title: title.trim().length !== 0,
+      user: Boolean(userSelect),
+    }));
   };
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,20 +86,23 @@ export const App = () => {
 
       <form action="/api/todos" method="POST" onSubmit={handleSubmit}>
         <div className="field">
+          <label htmlFor="title">Title: </label>
           <input
             type="text"
+            id="title"
             data-cy="titleInput"
             onChange={handleInput}
             value={title}
             placeholder="Enter a title"
           />
-          {!isValid.title && !title && (
+          {!isValid.title && !title.trim() && (
             <span className="error">Please enter a title</span>
           )}
         </div>
-
         <div className="field">
+          <label htmlFor="user">User: </label>
           <select
+            id="user"
             data-cy="userSelect"
             value={userSelect}
             onChange={handleSelect}
